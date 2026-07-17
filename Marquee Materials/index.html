@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Learn CSS From Scratch</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: #f4f5f7; color: #1a1a1a; line-height:1.65; }
+  header { background: #2b2d42; color: white; padding: 20px 28px; position: sticky; top: 0; z-index: 100; }
+  header h1 { margin: 0 0 2px; font-size: 22px; }
+  header p { margin: 0; color: #c9cbe0; font-size: 13px; }
+  nav.toc { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  nav.toc a { background:#3d3f5c; color:#e6e7f5; text-decoration:none; font-size:12px; padding:5px 10px; border-radius:14px; }
+  nav.toc a:hover { background:#ef8354; }
+
+  .container { max-width: 950px; margin: 0 auto; padding: 20px; }
+
+  .lesson { background:white; border-radius:10px; padding:24px 28px; margin-bottom:22px; box-shadow:0 1px 3px rgba(0,0,0,0.08); scroll-margin-top:160px; }
+  .lesson h2 { margin-top:0; color:#2b2d42; font-size:21px; border-bottom:2px solid #ef8354; padding-bottom:8px; }
+  .lesson h3 { color:#2b2d42; font-size:16.5px; margin:20px 0 8px; }
+  .explain { font-size:14.5px; color:#333; margin-bottom:12px; }
+  .explain b { color: #2b2d42; }
+  .analogy { background:#eef1ff; border-left:3px solid #4361ee; padding:10px 14px; border-radius:5px; font-size:13.5px; margin-bottom:14px; }
+  .analogy b { color:#2b2d42; }
+  .note { background:#fff8f0; border-left:3px solid #ef8354; padding:10px 14px; border-radius:5px; font-size:13px; margin-bottom:14px; }
+  .code-example { background:#1e1e2e; color:#c9cbe0; font-family:'Consolas',monospace; font-size:13px; padding:12px 16px; border-radius:6px; margin-bottom:14px; white-space:pre; overflow-x:auto; }
+  ul.point-list { font-size:14px; margin: 6px 0 14px; padding-left:22px; }
+  ul.point-list li { margin-bottom:5px; }
+
+  .exercise { background:#fafbff; border:1px solid #e4e6f5; border-radius:10px; padding:16px 20px; margin-top:16px; }
+  .exercise h4 { margin:0 0 8px; font-size:14px; color:#2b2d42; }
+  .exercise h4 .num { display:inline-block; background:#ef8354; color:white; width:22px; height:22px; border-radius:50%; text-align:center; line-height:22px; font-size:11px; margin-right:6px; }
+  .task { background: #fff8f0; border-left: 3px solid #ef8354; padding: 8px 12px; font-size: 13px; margin-bottom: 10px; border-radius: 4px; }
+  .work-area { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 700px) { .work-area { grid-template-columns: 1fr; } }
+  textarea { width: 100%; height: 115px; font-family: 'Consolas', monospace; font-size: 12.5px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; resize: vertical; background: #1e1e2e; color: #c9cbe0; }
+  .preview { border: 1px dashed #ccc; border-radius: 6px; padding: 10px; min-height: 115px; background: white; overflow: auto; }
+  .run-btn { margin-top: 6px; background: #2b2d42; color: white; border: none; padding: 5px 13px; border-radius: 5px; font-size: 12px; cursor: pointer; }
+  .run-btn:hover { background: #3d3f5c; }
+  .hint { margin-top: 8px; font-size: 11.5px; color: #888; cursor: pointer; }
+  .hint-text { display: none; font-size: 12.5px; background: #eef1ff; padding: 8px 10px; border-radius: 5px; margin-top: 6px; color: #333; }
+  code { background:#eee; padding:1px 5px; border-radius:3px; font-size:0.92em; }
+
+  /* Box model diagram */
+  .diagram-wrap { display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start; margin-bottom:10px; }
+  .diagram-controls { flex:1; min-width:220px; }
+  .diagram-controls label { display:block; font-size:13px; margin:10px 0 4px; color:#2b2d42; font-weight:600; }
+  .diagram-controls input[type=range] { width:100%; }
+  .diagram-controls .val { color:#ef8354; font-weight:bold; }
+  .diagram-stage { flex:1.4; min-width:280px; background:#f0f1f8; border-radius:8px; padding:20px; display:flex; align-items:center; justify-content:center; }
+  .box-margin { background: repeating-linear-gradient(45deg, #fdf1e7, #fdf1e7 6px, #fbe4cc 6px, #fbe4cc 12px); padding:0; transition: all 0.15s; }
+  .box-border-layer { background:#ef8354; transition: all 0.15s; }
+  .box-padding { background:#cfe0fc; transition: all 0.15s; }
+  .box-content { background:#4361ee; color:white; display:flex; align-items:center; justify-content:center; font-size:12px; text-align:center; min-height:40px; min-width:60px; transition: all 0.15s; }
+  .legend { display:flex; gap:14px; flex-wrap:wrap; margin-top:12px; font-size:12px; }
+  .legend span { display:inline-flex; align-items:center; gap:5px; }
+  .legend i { width:12px; height:12px; border-radius:3px; display:inline-block; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎨 Learn CSS From Scratch</h1>
+  <p>Every topic is explained in detail first, then you practice it live. Take your time and go step by step!</p>
+  <nav class="toc">
+    <a href="#l0">What is CSS?</a>
+    <a href="#l1">Selectors</a>
+    <a href="#l2">Colors</a>
+    <a href="#l3">Box Model</a>
+    <a href="#l4">Margin</a>
+    <a href="#l5">Padding</a>
+    <a href="#l6">Border</a>
+    <a href="#l7">Width/Height</a>
+    <a href="#l8">Typography</a>
+    <a href="#l9">Display</a>
+    <a href="#l10">Position</a>
+    <a href="#l11">Flexbox</a>
+    <a href="#l12">Grid</a>
+    <a href="#l13">Hover/Transition</a>
+  </nav>
+</header>
+
+<div class="container">
+
+  <!-- LESSON 0 -->
+  <div class="lesson" id="l0">
+    <h2>0. What is CSS?</h2>
+    <div class="explain">
+      <b>HTML</b> is the structure of a house — the walls, the rooms, the doors. <b>CSS (Cascading Style Sheets)</b> is the decoration — the wall colors, the furniture style, the lighting. CSS is what makes a website look good instead of just plain black text on a white page.
+    </div>
+    <h3>The Basic Syntax</h3>
+    <div class="explain">Every CSS rule has three parts: a <b>selector</b> (what to style), a <b>property</b> (what aspect to change), and a <b>value</b> (what to change it to).</div>
+    <div class="code-example">selector {
+  property: value;
+}
+
+/* Real example: */
+p {
+  color: blue;
+  font-size: 18px;
+}</div>
+    <ul class="point-list">
+      <li><code>p</code> is the selector — it means "every paragraph on the page."</li>
+      <li><code>color</code> and <code>font-size</code> are properties.</li>
+      <li><code>blue</code> and <code>18px</code> are values.</li>
+      <li>Every line MUST end with a semicolon <code>;</code> — this is the most common beginner mistake to forget!</li>
+      <li>The whole rule is wrapped in curly braces <code>{ }</code>.</li>
+    </ul>
+    <div class="note"><b>How CSS connects to HTML:</b> You can write CSS inside a <code>&lt;style&gt;</code> tag in your HTML file, or in a separate <code>.css</code> file linked with <code>&lt;link rel="stylesheet" href="style.css"&gt;</code>. In this practice sheet, we're writing CSS directly for you to experiment with.</div>
+
+    <div class="exercise">
+      <h4><span class="num">1</span>Write Your First CSS Rule</h4>
+      <div class="task">Task: Make the paragraph below <b>green</b> colored text with a <b>font-size of 20px</b>.</div>
+      <div class="work-area">
+        <div><textarea id="css1">.ex1 {\n\n}</textarea><button class="run-btn" onclick="run(1)">▶ Run</button></div>
+        <div class="preview"><style id="style1"></style><p class="ex1">Hello, I am learning CSS!</p></div>
+      </div>
+      <div class="hint" onclick="toggleHint(1)">💡 Show Hint</div>
+      <div class="hint-text" id="hint1">color: green; font-size: 20px;</div>
+    </div>
+  </div>
+
+  <!-- LESSON 1: SELECTORS -->
+  <div class="lesson" id="l1">
+    <h2>1. Selectors — Telling CSS What To Style</h2>
+    <div class="explain">A selector decides WHICH element(s) on the page get styled. There are several types:</div>
+    <div class="code-example">h1 { }          /* Element selector - ALL h1 tags */
+.myclass { }    /* Class selector - anything with class="myclass" */
+#myid { }       /* ID selector - the ONE element with id="myid" */
+* { }           /* Universal selector - EVERY element */
+h1, p { }       /* Grouped selector - both h1 AND p */</div>
+    <div class="analogy"><b>Analogy:</b> An element selector is like saying "all students in the school." A class selector is like "all students in Class 5B" (many students can share a class). An ID selector is like "the student with Roll Number 7" — only one person can have that exact roll number.</div>
+    <ul class="point-list">
+      <li>Class names in CSS start with a dot: <code>.fruit</code></li>
+      <li>ID names in CSS start with a hash: <code>#special</code></li>
+      <li>In HTML, you attach them like: <code>&lt;p class="fruit" id="special"&gt;</code></li>
+      <li>You can use MANY classes on one element, but only ONE id.</li>
+    </ul>
+
+    <div class="exercise">
+      <h4><span class="num">2</span>Class Selector</h4>
+      <div class="task">Task: Give every element with class <code>.fruit</code> an orange text color.</div>
+      <div class="work-area">
+        <div><textarea id="css2">.fruit {\n\n}</textarea><button class="run-btn" onclick="run(2)">▶ Run</button></div>
+        <div class="preview"><style id="style2"></style><div id="preview2"><p class="fruit">Apple</p><p class="fruit">Mango</p><p>Banana (no class)</p></div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(2)">💡 Show Hint</div>
+      <div class="hint-text" id="hint2">color: orange;</div>
+    </div>
+
+    <div class="exercise">
+      <h4><span class="num">3</span>ID Selector</h4>
+      <div class="task">Task: Give the element with id <code>#special</code> bold text and an underline.</div>
+      <div class="work-area">
+        <div><textarea id="css3">#special {\n\n}</textarea><button class="run-btn" onclick="run(3)">▶ Run</button></div>
+        <div class="preview"><style id="style3"></style><div id="preview3"><p>Normal paragraph</p><p id="special">This is the special one</p></div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(3)">💡 Show Hint</div>
+      <div class="hint-text" id="hint3">font-weight: bold; text-decoration: underline;</div>
+    </div>
+
+    <div class="exercise">
+      <h4><span class="num">4</span>Grouping Selectors</h4>
+      <div class="task">Task: Make BOTH the heading and the paragraph below have a purple color using one grouped selector (separate them with a comma).</div>
+      <div class="work-area">
+        <div><textarea id="css4">.grp-h, .grp-p {\n\n}</textarea><button class="run-btn" onclick="run(4)">▶ Run</button></div>
+        <div class="preview"><style id="style4"></style><div id="preview4"><h3 class="grp-h">A Heading</h3><p class="grp-p">A paragraph below it.</p></div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(4)">💡 Show Hint</div>
+      <div class="hint-text" id="hint4">color: purple;</div>
+    </div>
+  </div>
+
+  <!-- LESSON 2: COLORS -->
+  <div class="lesson" id="l2">
+    <h2>2. Colors & Backgrounds</h2>
+    <div class="explain">You can write colors in CSS in several ways:</div>
+    <ul class="point-list">
+      <li><b>Named colors:</b> <code>red</code>, <code>blue</code>, <code>teal</code> — easy but limited (147 names exist)</li>
+      <li><b>Hex codes:</b> <code>#ff0000</code> — 6 characters representing Red-Green-Blue in hexadecimal. <code>#ff0000</code> is pure red, <code>#000000</code> is black, <code>#ffffff</code> is white.</li>
+      <li><b>RGB:</b> <code>rgb(255, 0, 0)</code> — same idea but written as three numbers (0–255)</li>
+      <li><b>RGBA:</b> <code>rgba(255, 0, 0, 0.5)</code> — same as RGB but with a 4th number for transparency (0 = invisible, 1 = fully solid)</li>
+    </ul>
+    <div class="note"><b>Two different properties:</b> <code>color</code> changes TEXT color. <code>background-color</code> changes the BACKGROUND color of the box. Beginners often mix these up!</div>
+
+    <div class="exercise">
+      <h4><span class="num">5</span>Text Color vs Background Color</h4>
+      <div class="task">Task: Give <code>.box5</code> a background-color of <code>#ffd60a</code> (yellow) and a text color of <code>#333</code> (dark gray).</div>
+      <div class="work-area">
+        <div><textarea id="css5">.box5 {\n\n}</textarea><button class="run-btn" onclick="run(5)">▶ Run</button></div>
+        <div class="preview"><style id="style5"></style><div class="box5" id="preview5" style="padding:16px;">Colorful Box</div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(5)">💡 Show Hint</div>
+      <div class="hint-text" id="hint5">background-color: #ffd60a; color: #333;</div>
+    </div>
+
+    <div class="exercise">
+      <h4><span class="num">6</span>Transparency with RGBA</h4>
+      <div class="task">Task: Give <code>.box6</code> a semi-transparent blue background using <code>rgba(67, 97, 238, 0.4)</code> so the striped pattern behind it shows through slightly.</div>
+      <div class="work-area">
+        <div><textarea id="css6">.box6 {\n\n}</textarea><button class="run-btn" onclick="run(6)">▶ Run</button></div>
+        <div class="preview" style="background:repeating-linear-gradient(45deg,#eee,#eee 10px,#ddd 10px,#ddd 20px);"><style id="style6"></style><div class="box6" id="preview6" style="padding:20px; color:#222;">See-through box</div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(6)">💡 Show Hint</div>
+      <div class="hint-text" id="hint6">background-color: rgba(67, 97, 238, 0.4);</div>
+    </div>
+  </div>
+
+  <!-- LESSON 3: BOX MODEL OVERVIEW -->
+  <div class="lesson" id="l3">
+    <h2>3. The Box Model — The Most Important Concept</h2>
+    <div class="explain">
+      Every single element on a webpage is secretly a <b>rectangular box</b> — even text and images. Understanding this box is the key to controlling layout. Each box is made of <b>4 layers</b>, from the inside out:
+    </div>
+    <ul class="point-list">
+      <li><b>Content</b> — the actual text or image inside</li>
+      <li><b>Padding</b> — transparent space BETWEEN the content and the border (inside the box)</li>
+      <li><b>Border</b> — the visible line around the padding</li>
+      <li><b>Margin</b> — transparent space OUTSIDE the border (pushes other elements away)</li>
+    </ul>
+    <div class="analogy">
+      <b>The Photo Frame Analogy:</b> Imagine a framed photo hanging on a wall:
+      <br>• <b>Content</b> = the photo itself
+      <br>• <b>Padding</b> = the white cardboard space between the photo and the wooden frame (INSIDE the frame)
+      <br>• <b>Border</b> = the wooden frame itself
+      <br>• <b>Margin</b> = the empty wall space between this frame and the next picture hanging next to it (OUTSIDE the frame)
+    </div>
+    <div class="note">The key difference to remember: <b>padding pushes the border outward</b> (grows the box), while <b>margin pushes other elements away</b> (the box's own size doesn't change — it's the space around it).</div>
+
+    <h3>🔬 Try It Yourself — Live Box Model Diagram</h3>
+    <div class="explain">Move the sliders below and watch how margin, border, and padding change the box in real time:</div>
+    <div class="diagram-wrap">
+      <div class="diagram-controls">
+        <label>Margin: <span class="val" id="marginVal">20</span>px</label>
+        <input type="range" id="marginSlider" min="0" max="60" value="20" oninput="updateBoxModel()">
+        <label>Border: <span class="val" id="borderVal">4</span>px</label>
+        <input type="range" id="borderSlider" min="0" max="20" value="4" oninput="updateBoxModel()">
+        <label>Padding: <span class="val" id="paddingVal">20</span>px</label>
+        <input type="range" id="paddingSlider" min="0" max="60" value="20" oninput="updateBoxModel()">
+        <div class="legend">
+          <span><i style="background:#fbe4cc;"></i>Margin</span>
+          <span><i style="background:#ef8354;"></i>Border</span>
+          <span><i style="background:#cfe0fc;"></i>Padding</span>
+          <span><i style="background:#4361ee;"></i>Content</span>
+        </div>
+      </div>
+      <div class="diagram-stage">
+        <div class="box-margin" id="boxMargin">
+          <div class="box-border-layer" id="boxBorder">
+            <div class="box-padding" id="boxPadding">
+              <div class="box-content" id="boxContent">Content</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON 4: MARGIN -->
+  <div class="lesson" id="l4">
+    <h2>4. Margin — Space Outside the Box</h2>
+    <div class="explain">Margin creates space AROUND an element, pushing away from its neighbors. It is always invisible/transparent — you'll never see a color there.</div>
+    <div class="code-example">.box {
+  margin: 20px;              /* all 4 sides = 20px */
+  margin-top: 10px;          /* only top */
+  margin-right: 15px;        /* only right */
+  margin-bottom: 10px;       /* only bottom */
+  margin-left: 15px;         /* only left */
+}</div>
+    <h3>Shorthand — Setting All Sides at Once</h3>
+    <div class="explain">Instead of writing 4 separate lines, you can combine them. The order always goes <b>clockwise starting from the top</b>: Top, Right, Bottom, Left. A good trick to remember the order is the word <b>"TRouBLe"</b>.</div>
+    <div class="code-example">margin: 10px 20px 30px 40px;
+/*      top  right bottom left */
+
+margin: 10px 20px;
+/* top&bottom = 10px, left&right = 20px (2 values) */
+
+margin: 15px;
+/* all four sides = 15px (1 value) */</div>
+
+    <div class="exercise">
+      <h4><span class="num">7</span>Basic Margin</h4>
+      <div class="task">Task: These two boxes are touching each other. Add a <code>margin-bottom: 30px</code> to <code>.box7a</code> so there's a gap between them.</div>
+      <div class="work-area">
+        <div><textarea id="css7">.box7a {\n\n}</textarea><button class="run-btn" onclick="run(7)">▶ Run</button></div>
+        <div class="preview"><style id="style7"></style><div id="preview7"><div class="box7a" style="background:#ef8354; color:white; padding:10px;">Box 1</div><div class="box7b" style="background:#4361ee; color:white; padding:10px;">Box 2</div></div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(7)">💡 Show Hint</div>
+      <div class="hint-text" id="hint7">margin-bottom: 30px;</div>
+    </div>
+
+    <div class="exercise">
+      <h4><span class="num">8</span>Margin Shorthand (4 values)</h4>
+      <div class="task">Task: Using ONE shorthand line, give <code>.box8</code>: top margin 10px, right margin 25px, bottom margin 10px, left margin 25px.</div>
+      <div class="work-area">
+        <div><textarea id="css8">.box8 {\n\n}</textarea><button class="run-btn" onclick="run(8)">▶ Run</button></div>
+        <div class="preview" style="background:#eee;"><style id="style8"></style><div class="box8" id="preview8" style="background:#ef8354; color:white; padding:10px;">Shorthand Box</div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(8)">💡 Show Hint</div>
+      <div class="hint-text" id="hint8">margin: 10px 25px 10px 25px;</div>
+    </div>
+
+    <div class="exercise">
+      <h4><span class="num">9</span>Centering With margin: auto</h4>
+      <div class="explain" style="margin-bottom:8px;">A special trick: if a box has a fixed width, setting <code>margin: 0 auto;</code> will automatically center it horizontally within its parent!</div>
+      <div class="task">Task: <code>.box9</code> has a fixed width of 150px. Center it horizontally using <code>margin: 0 auto;</code></div>
+      <div class="work-area">
+        <div><textarea id="css9">.box9 {\n  width: 150px;\n\n}</textarea><button class="run-btn" onclick="run(9)">▶ Run</button></div>
+        <div class="preview" style="background:#eee;"><style id="style9"></style><div class="box9" id="preview9" style="background:#4361ee; color:white; padding:10px; text-align:center;">Center Me</div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(9)">💡 Show Hint</div>
+      <div class="hint-text" id="hint9">margin: 0 auto;</div>
+    </div>
+
+    <div class="exercise">
+      <h4><span class="num">10</span>Negative Margin (Advanced)</h4>
+      <div class="explain" style="margin-bottom:8px;">Margins CAN be negative — this pulls an element closer to (or overlapping) its neighbor instead of pushing away. It's an advanced trick, but good to know exists.</div>
+      <div class="task">Task: <code>.overlap10</code> should overlap the box above it by 20px. Give it <code>margin-top: -20px;</code></div>
+      <div class="work-area">
+        <div><textarea id="css10">.overlap10 {\n\n}</textarea><button class="run-btn" onclick="run(10)">▶ Run</button></div>
+        <div class="preview"><style id="style10"></style><div id="preview10"><div style="background:#2b2d42; color:white; padding:20px;">Bottom Box</div><div class="overlap10" style="background:#ef8354; color:white; padding:14px; width:70%;">Overlapping Box</div></div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(10)">💡 Show Hint</div>
+      <div class="hint-text" id="hint10">margin-top: -20px;</div>
+    </div>
+  </div>
+
+  <!-- LESSON 5: PADDING -->
+  <div class="lesson" id="l5">
+    <h2>5. Padding — Space Inside the Box</h2>
+    <div class="explain">Padding creates space INSIDE an element, between its content and its border. Unlike margin, padding IS filled with the element's background color — it's not invisible.</div>
+    <div class="code-example">.box {
+  padding: 20px;              /* all 4 sides */
+  padding-top: 10px;
+  padding-right: 15px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+}
+
+/* Shorthand works the same way as margin */
+padding: 10px 20px 30px 40px;  /* top right bottom left */</div>
+
+    <div class="exercise">
+      <h4><span class="num">11</span>Basic Padding</h4>
+      <div class="task">Task: Give <code>.box11</code> a padding of 25px on all sides, so the text isn't touching the dashed border.</div>
+      <div class="work-area">
+        <div><textarea id="css11">.box11 {\n  background: #cfe0fc;\n\n}</textarea><button class="run-btn" onclick="run(11)">▶ Run</button></div>
+        <div class="preview"><style id="style11"></style><div class="box11" id="preview11" style="border:2px dashed #4361ee;">I need padding around me</div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(11)">💡 Show Hint</div>
+      <div class="hint-text" id="hint11">padding: 25px;</div>
+    </div>
+
+    <div class="exercise">
+      <h4><span class="num">12</span>Padding on One Side Only</h4>
+      <div class="task">Task: This text is stuck to the left edge of its box. Add <code>padding-left: 20px</code> to <code>.box12</code> to push it away from the edge.</div>
+      <div class="work-area">
+        <div><textarea id="css12">.box12 {\n\n}</textarea><button class="run-btn" onclick="run(12)">▶ Run</button></div>
+        <div class="preview"><style id="style12"></style><div class="box12" id="preview12" style="background:#ef8354; color:white; padding-top:12px; padding-bottom:12px;">Push me from the left edge</div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(12)">💡 Show Hint</div>
+      <div class="hint-text" id="hint12">padding-left: 20px;</div>
+    </div>
+
+    <div class="exercise">
+      <h4><span class="num">13</span>Padding vs Margin — Compare Them</h4>
+      <div class="explain" style="margin-bottom:8px;">Both boxes below start identical. Give <code>.pad13</code> a padding of 20px (notice the background color fills that space), and give <code>.mar13</code> a margin of 20px (notice it just pushes it away, no color fills there).</div>
+      <div class="task">Task: Add <code>padding: 20px</code> to <code>.pad13</code> AND <code>margin: 20px</code> to <code>.mar13</code>. Compare the visual difference!</div>
+      <div class="work-area">
+        <div><textarea id="css13">.pad13 {\n\n}\n.mar13 {\n\n}</textarea><button class="run-btn" onclick="run(13)">▶ Run</button></div>
+        <div class="preview" style="background:#eee;"><style id="style13"></style><div id="preview13"><div class="pad13" style="background:#cfe0fc; border:2px solid #4361ee; margin-bottom:8px;">Padding Box</div><div class="mar13" style="background:#fbe4cc; border:2px solid #ef8354;">Margin Box</div></div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(13)">💡 Show Hint</div>
+      <div class="hint-text" id="hint13">.pad13 { padding: 20px; } .mar13 { margin: 20px; }</div>
+    </div>
+
+    <div class="exercise">
+      <h4><span class="num">14</span>box-sizing: border-box</h4>
+      <div class="explain" style="margin-bottom:8px;">By default, when you add padding, it INCREASES the total width of a box beyond what you set. This confuses beginners! The fix: <code>box-sizing: border-box</code> makes padding & border count INSIDE the fixed width instead of adding to it.</div>
+      <div class="task">Task: <code>.box14</code> is set to a fixed width of 150px with 20px padding and a 2px border. Add <code>box-sizing: border-box;</code> so the total width stays exactly 150px.</div>
+      <div class="work-area">
+        <div><textarea id="css14">.box14 {\n  width: 150px;\n  padding: 20px;\n  border: 2px solid #333;\n\n}</textarea><button class="run-btn" onclick="run(14)">▶ Run</button></div>
+        <div class="preview" style="background:#eee;"><style id="style14"></style><div class="box14" id="preview14" style="background:#cde;">Fixed width box</div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(14)">💡 Show Hint</div>
+      <div class="hint-text" id="hint14">box-sizing: border-box;</div>
+    </div>
+  </div>
+
+  <!-- LESSON 6: BORDER -->
+  <div class="lesson" id="l6">
+    <h2>6. Border</h2>
+    <div class="explain">A border needs THREE things to be visible: a <b>width</b> (how thick), a <b>style</b> (solid, dashed, dotted, double), and a <b>color</b>. If you forget the style, the border won't show at all — this is a very common mistake!</div>
+    <div class="code-example">.box {
+  border-width: 3px;
+  border-style: solid;
+  border-color: red;
+
+  /* or all in one line (shorthand): */
+  border: 3px solid red;
+}</div>
+
+    <div class="exercise">
+      <h4><span class="num">15</span>Border Basics</h4>
+      <div class="task">Task: Give <code>.box15</code> a 4px thick, dashed, purple border.</div>
+      <div class="work-area">
+        <div><textarea id="css15">.box15 {\n\n}</textarea><button class="run-btn" onclick="run(15)">▶ Run</button></div>
+        <div class="preview"><style id="style15"></style><div class="box15" id="preview15" style="padding:20px;">Border Box</div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(15)">💡 Show Hint</div>
+      <div class="hint-text" id="hint15">border: 4px dashed purple;</div>
+    </div>
+
+    <div class="exercise">
+      <h4><span class="num">16</span>Rounded Corners with border-radius</h4>
+      <div class="task">Task: Add <code>border-radius: 12px</code> to <code>.box16</code> to round its corners. Then try <code>border-radius: 50%</code> to see it become a perfect circle!</div>
+      <div class="work-area">
+        <div><textarea id="css16">.box16 {\n\n}</textarea><button class="run-btn" onclick="run(16)">▶ Run</button></div>
+        <div class="preview"><style id="style16"></style><div class="box16" id="preview16" style="width:90px; height:90px; background:#ef8354;"></div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(16)">💡 Show Hint</div>
+      <div class="hint-text" id="hint16">border-radius: 12px; /* try 50% for a circle */</div>
+    </div>
+
+    <div class="exercise">
+      <h4><span class="num">17</span>box-shadow</h4>
+      <div class="explain" style="margin-bottom:8px;">box-shadow syntax: <code>box-shadow: X-offset Y-offset blur color;</code></div>
+      <div class="task">Task: Give <code>.box17</code> a shadow that's 0px right, 4px down, 12px blurry, using color <code>rgba(0,0,0,0.25)</code>.</div>
+      <div class="work-area">
+        <div><textarea id="css17">.box17 {\n\n}</textarea><button class="run-btn" onclick="run(17)">▶ Run</button></div>
+        <div class="preview" style="background:#eee;"><style id="style17"></style><div class="box17" id="preview17" style="background:white; padding:20px; border-radius:8px;">Shadow Card</div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(17)">💡 Show Hint</div>
+      <div class="hint-text" id="hint17">box-shadow: 0px 4px 12px rgba(0,0,0,0.25);</div>
+    </div>
+  </div>
+
+  <!-- LESSON 7: WIDTH/HEIGHT -->
+  <div class="lesson" id="l7">
+    <h2>7. Width & Height</h2>
+    <div class="explain">You can set an element's size directly. Units can be fixed (<code>px</code>) or relative (<code>%</code> of the parent's size).</div>
+    <div class="exercise">
+      <h4><span class="num">18</span>Fixed vs Percentage Width</h4>
+      <div class="task">Task: Give <code>.fixed18</code> a width of <b>120px</b> (fixed), and give <code>.relative18</code> a width of <b>60%</b> (relative to its parent).</div>
+      <div class="work-area">
+        <div><textarea id="css18">.fixed18 {\n\n}\n.relative18 {\n\n}</textarea><button class="run-btn" onclick="run(18)">▶ Run</button></div>
+        <div class="preview"><style id="style18"></style><div id="preview18" style="background:#eee; padding:8px;"><div class="fixed18" style="background:#4361ee; color:white; padding:8px; margin-bottom:6px;">Fixed (px)</div><div class="relative18" style="background:#ef8354; color:white; padding:8px;">Relative (%)</div></div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(18)">💡 Show Hint</div>
+      <div class="hint-text" id="hint18">.fixed18 { width: 120px; } .relative18 { width: 60%; }</div>
+    </div>
+  </div>
+
+  <!-- LESSON 8: TYPOGRAPHY -->
+  <div class="lesson" id="l8">
+    <h2>8. Typography (Text Styling)</h2>
+    <div class="explain">Common text properties: <code>font-size</code>, <code>font-weight</code>, <code>font-family</code>, <code>text-align</code>, <code>text-decoration</code>, <code>line-height</code>, <code>letter-spacing</code>.</div>
+    <div class="exercise">
+      <h4><span class="num">19</span>Styling a Heading</h4>
+      <div class="task">Task: Make <code>.heading19</code> have font-size 26px, text-align center, and font-weight bold.</div>
+      <div class="work-area">
+        <div><textarea id="css19">.heading19 {\n\n}</textarea><button class="run-btn" onclick="run(19)">▶ Run</button></div>
+        <div class="preview"><style id="style19"></style><h3 class="heading19" id="preview19">My Heading</h3></div>
+      </div>
+      <div class="hint" onclick="toggleHint(19)">💡 Show Hint</div>
+      <div class="hint-text" id="hint19">font-size: 26px; text-align: center; font-weight: bold;</div>
+    </div>
+
+    <div class="exercise">
+      <h4><span class="num">20</span>Removing Underline & Uppercase Text</h4>
+      <div class="task">Task: Remove the underline from this link (<code>text-decoration: none</code>) and make its text UPPERCASE (<code>text-transform: uppercase</code>).</div>
+      <div class="work-area">
+        <div><textarea id="css20">.label20 {\n\n}</textarea><button class="run-btn" onclick="run(20)">▶ Run</button></div>
+        <div class="preview"><style id="style20"></style><a href="#" class="label20" id="preview20">click here for details</a></div>
+      </div>
+      <div class="hint" onclick="toggleHint(20)">💡 Show Hint</div>
+      <div class="hint-text" id="hint20">text-decoration: none; text-transform: uppercase;</div>
+    </div>
+  </div>
+
+  <!-- LESSON 9: DISPLAY -->
+  <div class="lesson" id="l9">
+    <h2>9. Display Property</h2>
+    <div class="explain">The <code>display</code> property controls how an element behaves in the layout flow:</div>
+    <ul class="point-list">
+      <li><b>block</b> — takes up the full width available, always starts on a new line (e.g. <code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>)</li>
+      <li><b>inline</b> — only takes as much width as its content needs, sits on the same line as neighbors, and width/height DON'T work on it (e.g. <code>&lt;span&gt;</code>, <code>&lt;a&gt;</code>)</li>
+      <li><b>inline-block</b> — best of both: sits on the same line AND respects width/height</li>
+      <li><b>none</b> — completely hides the element (removes it from the page)</li>
+    </ul>
+    <div class="exercise">
+      <h4><span class="num">21</span>inline-block in Action</h4>
+      <div class="task">Task: These three chips are currently stacking vertically because they're <code>&lt;div&gt;</code> elements (block by default). Change <code>.chip21</code> to <code>display: inline-block</code> so they sit side by side.</div>
+      <div class="work-area">
+        <div><textarea id="css21">.chip21 {\n  width: 70px;\n  background: #4361ee;\n  color: white;\n  text-align: center;\n  padding: 8px 0;\n\n}</textarea><button class="run-btn" onclick="run(21)">▶ Run</button></div>
+        <div class="preview"><style id="style21"></style><div id="preview21"><div class="chip21">A</div><div class="chip21">B</div><div class="chip21">C</div></div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(21)">💡 Show Hint</div>
+      <div class="hint-text" id="hint21">display: inline-block;</div>
+    </div>
+  </div>
+
+  <!-- LESSON 10: POSITION -->
+  <div class="lesson" id="l10">
+    <h2>10. Position Property</h2>
+    <div class="explain">
+      <code>position</code> controls how an element is placed relative to the normal flow:
+    </div>
+    <ul class="point-list">
+      <li><b>static</b> — the default, normal flow, top/left/right/bottom have no effect</li>
+      <li><b>relative</b> — stays in normal flow, but you CAN nudge it using top/left/right/bottom, relative to where it WOULD have been</li>
+      <li><b>absolute</b> — removed from normal flow, positioned relative to its nearest ancestor that has <code>position: relative</code> (or the page if none)</li>
+      <li><b>fixed</b> — stays glued to the same spot on screen even when you scroll</li>
+    </ul>
+    <div class="exercise">
+      <h4><span class="num">22</span>Absolute Positioning (Badge Example)</h4>
+      <div class="task">Task: Position <code>.badge22</code> in the top-right corner of its parent box using <code>position: absolute; top: 5px; right: 5px;</code></div>
+      <div class="work-area">
+        <div><textarea id="css22">.badge22 {\n\n}</textarea><button class="run-btn" onclick="run(22)">▶ Run</button></div>
+        <div class="preview"><style id="style22"></style><div style="position:relative; background:#ddd; height:100px; width:100%;"><div class="badge22" id="preview22" style="background:red; color:white; padding:4px 8px; border-radius:10px; font-size:12px;">New</div></div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(22)">💡 Show Hint</div>
+      <div class="hint-text" id="hint22">position: absolute; top: 5px; right: 5px;</div>
+    </div>
+  </div>
+
+  <!-- LESSON 11: FLEXBOX -->
+  <div class="lesson" id="l11">
+    <h2>11. Flexbox — Aligning Items Easily</h2>
+    <div class="explain">Flexbox is the modern way to arrange items in a row or column. Put <code>display: flex</code> on the PARENT, then use <code>justify-content</code> (horizontal alignment) and <code>align-items</code> (vertical alignment) to position the children.</div>
+    <div class="code-example">.parent {
+  display: flex;
+  justify-content: center;  /* left, center, right, space-between... */
+  align-items: center;      /* top, center, bottom */
+  gap: 10px;                /* space between items */
+}</div>
+
+    <div class="exercise">
+      <h4><span class="num">23</span>Centering with Flexbox</h4>
+      <div class="task">Task: Center the item both horizontally and vertically inside <code>.flex23</code>.</div>
+      <div class="work-area">
+        <div><textarea id="css23">.flex23 {\n  display: flex;\n\n}</textarea><button class="run-btn" onclick="run(23)">▶ Run</button></div>
+        <div class="preview"><style id="style23"></style><div class="flex23" id="preview23" style="height:90px; border:1px dashed #999;"><div style="background:#ef8354; color:white; padding:10px;">Item</div></div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(23)">💡 Show Hint</div>
+      <div class="hint-text" id="hint23">justify-content: center; align-items: center;</div>
+    </div>
+
+    <div class="exercise">
+      <h4><span class="num">24</span>flex-direction: column</h4>
+      <div class="task">Task: Make the items in <code>.flex24</code> stack vertically instead of horizontally, using <code>flex-direction: column</code>.</div>
+      <div class="work-area">
+        <div><textarea id="css24">.flex24 {\n  display: flex;\n\n}</textarea><button class="run-btn" onclick="run(24)">▶ Run</button></div>
+        <div class="preview"><style id="style24"></style><div class="flex24" id="preview24" style="border:1px dashed #999; padding:10px; gap:8px;"><div style="background:#4361ee; color:white; padding:8px;">1</div><div style="background:#4361ee; color:white; padding:8px;">2</div><div style="background:#4361ee; color:white; padding:8px;">3</div></div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(24)">💡 Show Hint</div>
+      <div class="hint-text" id="hint24">flex-direction: column;</div>
+    </div>
+  </div>
+
+  <!-- LESSON 12: GRID -->
+  <div class="lesson" id="l12">
+    <h2>12. CSS Grid — Rows & Columns</h2>
+    <div class="explain">Grid lets you build table-like layouts. <code>grid-template-columns</code> defines how many columns and their widths. <code>1fr</code> means "one fraction of the available space."</div>
+    <div class="exercise">
+      <h4><span class="num">25</span>3-Column Grid</h4>
+      <div class="task">Task: Make <code>.grid25</code> a grid with 3 equal columns and a gap of 10px.</div>
+      <div class="work-area">
+        <div><textarea id="css25">.grid25 {\n\n}</textarea><button class="run-btn" onclick="run(25)">▶ Run</button></div>
+        <div class="preview"><style id="style25"></style><div class="grid25" id="preview25">
+          <div style="background:#4361ee; color:white; padding:12px; text-align:center;">1</div>
+          <div style="background:#4361ee; color:white; padding:12px; text-align:center;">2</div>
+          <div style="background:#4361ee; color:white; padding:12px; text-align:center;">3</div>
+          <div style="background:#4361ee; color:white; padding:12px; text-align:center;">4</div>
+        </div></div>
+      </div>
+      <div class="hint" onclick="toggleHint(25)">💡 Show Hint</div>
+      <div class="hint-text" id="hint25">display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;</div>
+    </div>
+  </div>
+
+  <!-- LESSON 13: HOVER/TRANSITION -->
+  <div class="lesson" id="l13">
+    <h2>13. Hover Effects & Transitions</h2>
+    <div class="explain"><code>:hover</code> lets you style an element only while the mouse is over it. <code>transition</code> makes property changes happen smoothly instead of instantly.</div>
+    <div class="exercise">
+      <h4><span class="num">26</span>Smooth Hover Effect</h4>
+      <div class="task">Task: Make this button's background smoothly change color on hover. Add <code>transition: background 0.3s;</code> to <code>.tbtn26</code> and a new background color in <code>.tbtn26:hover</code>.</div>
+      <div class="work-area">
+        <div><textarea id="css26">.tbtn26 {\n\n}\n.tbtn26:hover {\n\n}</textarea><button class="run-btn" onclick="run(26)">▶ Run</button></div>
+        <div class="preview"><style id="style26"></style><button class="tbtn26" id="preview26" style="background:#4361ee; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer;">Hover Me</button></div>
+      </div>
+      <div class="hint" onclick="toggleHint(26)">💡 Show Hint</div>
+      <div class="hint-text" id="hint26">.tbtn26 { transition: background 0.3s; } .tbtn26:hover { background: #ef8354; }</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function run(n) {
+  document.getElementById('style' + n).textContent = document.getElementById('css' + n).value;
+}
+function toggleHint(n) {
+  const el = document.getElementById('hint' + n);
+  el.style.display = el.style.display === 'block' ? 'none' : 'block';
+}
+function updateBoxModel() {
+  const m = document.getElementById('marginSlider').value;
+  const b = document.getElementById('borderSlider').value;
+  const p = document.getElementById('paddingSlider').value;
+  document.getElementById('marginVal').textContent = m;
+  document.getElementById('borderVal').textContent = b;
+  document.getElementById('paddingVal').textContent = p;
+  document.getElementById('boxMargin').style.padding = m + 'px';
+  document.getElementById('boxBorder').style.padding = b + 'px';
+  document.getElementById('boxPadding').style.padding = p + 'px';
+}
+updateBoxModel();
+</script>
+
+</body>
+</html>
