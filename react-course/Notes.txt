@@ -1,0 +1,39 @@
+Lession 1 : REACT BASICS AND JSX. 
+
+what is React?
+react is a external lib that help us to create website easier.
+
+
+what is babel? 
+js compiler that translates other language to js. 
+
+when using react, we don't use normal javaScript. 
+we use enchanced version of javaScript = JSX 
+
+JSX = javaScript XML 
+same as javaScript, but we can write HTML directly in our javaScript code. 
+
+eg. const button = <button> click me </button>
+
+our web-browser doesn't understand jsx, need to translates jsx to javaScript that why babel is used. 
+
+
+
+
+Lession 2 : COMPONENTS AND PROPS 
+
+components = just a piece of a website. 
+
+when building website: 
+-it's better to split the website into pieces 
+-so we can work on a small piece of a website at a time. 
+
+The component name must start with a letter. 
+
+fragement(<> </>)
+allows us to group elements together, without creating an extra <div> 
+
+
+props stands for properties 
+props make our component reusable.
+
