@@ -1,2 +1,4 @@
-let a; 
-// console.log(a);
+
+const {name, age, ...x} = student; 
+console.log(name)
+console.log(x)
